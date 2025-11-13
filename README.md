@@ -79,6 +79,12 @@ This is achieved through a **simulated annealing process** combined with a **tab
 
 This phase ends when a valid solution is reached or a maximum iteration limit is met.
 
+**After the reviews:**
+
+`tweak_findValid()` has been enhanced to consider both the overload and the item value when deciding which elements to move or remove.
+Moves are now tabu-tracked as (item, from, to) tuples.
+This means the algorithm no longer removes items purely based on constraint violations, but instead balances repair and value retention, leading to more efficient transitions toward high-quality valid states.
+
 ---
 
 ### 3. Phase 2 — Value optimization
@@ -90,6 +96,12 @@ Once a valid solution is available, the second phase aims to **increase the tota
   * Swapping low-value assigned items with high-value unassigned ones,
   * Occasionally adding new items to encourage exploration.
 * Only valid solutions are considered; occasionally, slightly worse valid solutions are accepted (5% probability) to prevent stagnation.
+
+**After the reviews:**
+
+A strategic perturbation mechanism has been introduced to improve diversification and escape stagnation.
+If no improvement occurs for a long period, the algorithm now removes a small percentage of the lowest-value items, freeing capacity for potentially more valuable combinations in subsequent iterations.
+This helps maintain progress and avoid getting trapped in local optima during late-stage optimization.
 
 ---
 
@@ -107,6 +119,22 @@ Value percentage: 63.08% of theoretical maximum
 ```
 
 The algorithm achieved valid, high-value assignments while maintaining a reasonable runtime.
+
+**After the reviews:**
+
+Key results for the largest case:
+
+```
+
+Valid solution found after 1 iteration.
+Final solution: 2554 items assigned
+Total value = 1,608,896
+Valid = True
+Total value assigned: 64.60% of the theoretical maximum
+
+```
+Also problem 2 improved a little, from around 85% to 87-88% of theoretical maximum.
+Problem 1 was already at 100%.
 
 ---
 
